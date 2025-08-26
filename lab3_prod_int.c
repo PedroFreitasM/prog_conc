@@ -97,6 +97,30 @@ int main(int argc, char *argv[]){
 		args->tam = n;
 		args->nthreads = nthreads;
 		args->id = i;
-		if (pthread_create)
+		if (pthread_create(&tid_sistema[i], NULL, prodVetor, (void *) args)){
+			printf("ERRO no pthread create\n");
+			exit(-1);
+		}
 	}
+
+	//espera as threads terminarem
+	prod_par_global=0;
+	for(int i = 0; i<nthreads; i++){
+		if (pthread_join(tid_sistema[i], (void *)&prod_retorno_threads)){
+			printf("ERRO do join da thread\n");
+			exit(-1);
+		}
+		prod_par_global += *prod_retorno_threads;
+		free(prod_retorno_threads);
+	}
+
+	//printa os resultados
+	
+
+	//desaloca os espacos
+	free(vet1);
+	free(vet2);
+	free(tid_sistema);
+
+	fclose(arq);
 }
