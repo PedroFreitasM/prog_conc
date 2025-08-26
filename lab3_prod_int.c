@@ -17,7 +17,7 @@ typedef struct{
 void *prodVetor (void *args){
 	t_args *arg = (t_args *) args;
 	int ini, fim, fatia;
-	float prod_local=0; *ret;
+	float prod_local=0, *ret;
 	
 	fatia = arg->tam / arg->nthreads;
 	ini = arg->id * fatia;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
 	vet2 = (float *)malloc(sizeof(float) * n);
 	if(vet1 == NULL || vet2 == NULL){
 		printf("ERRO no malloc dos vetores\n");
-		exit(-1);vet
+		exit(-1);
 	}
 	ret = fread(vet1, sizeof(float), n, arq);
 	ret = fread(vet2, sizeof(float), n, arq);
