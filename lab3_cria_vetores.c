@@ -12,11 +12,12 @@ int main(int argc, char* argv[]){
 	float *vetor2;
 	long int dim;
 	float elem;
+    float prod_int = 0.0;
 	int fator=1;
 	FILE * arq;
 	
 	if (argc < 3) {
-		printf("ERRO: formato do programa: %s <dimensao>< <nome arquivo saida>\n", argv[0]);
+		printf("ERRO: formato do programa: %s <dimensao> <nome arquivo saida>\n", argv[0]);
 	return 1;
 	}
 	dim = atoi(argv[1]);
@@ -30,7 +31,6 @@ int main(int argc, char* argv[]){
 
 	srand(time(NULL));
 	for(long int i = 0;i< 2*dim;i++){
-		printf("Valor de i: %ld \n", i);
 		elem = (rand() % MAX)/3.0 * fator;
 		if (i < dim){
 			vetor1[i] = elem;
@@ -41,11 +41,11 @@ int main(int argc, char* argv[]){
 	}
 	#ifdef LOG
 	fprintf(stdout, "%ld\n", n);
-	for(int i = 0; i < dim; i++){
+	for(long int i = 0; i < dim; i++){
 		fprintf(stdout, "%f ",vetor1[i]);
 	}
 	fprinf(stdout, "\n");
-        for(int i = 0; i < dim; i++){
+        for(long int i = 0; i < dim; i++){
                 fprintf(stdout, "%f ",vetor2[i]);
         }
 	fprintf(stdout,"\n");
@@ -56,9 +56,19 @@ int main(int argc, char* argv[]){
 		printf("Erro de abertura no arquivo\n");
 		return 3;
 	}
+    //escreve a dimensao e os vetores no arquivo
 	fwrite(&dim, sizeof(long int), 1, arq);
 	fwrite(vetor1, sizeof(float), dim, arq);
 	fwrite(vetor2, sizeof(float), dim, arq);
+
+    //escreve o valor do prod. interno no arquivo
+    //primeiro tem que ver o valor do prod...
+    for (long int i = 0; i < dim; i++){
+        prod_int += (vetor1[i] * vetor2[i]);
+    }
+    fwrite(&prod_int, sizeof(float), 1, arq);    
+    printf("Valor do produto interno: %f \n", prod_int);    
+
 	fclose(arq);
 	free(vetor1);
 	free(vetor2);
