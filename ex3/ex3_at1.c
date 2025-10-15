@@ -151,7 +151,7 @@ int main(int argc, char** argv){
 	}
 	}
 	printf("\n RESULTADOS: \n");
-	printf("Total de primos: %d", qt_primos);
+	printf("Total de primos: %d \n", qt_primos);
 	printf("Thread vencedora: %d \n", thread_vencedora);
 	printf("Primos contados por ela: %d \n", maior_valor);
 	free(buffer);
