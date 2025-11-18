@@ -1,8 +1,5 @@
-/* Disciplina: Programacao Concorrente */
-/* Prof.: Silvana Rossetto */
-/* Laboratório: 11 */
-/* Codigo: Exemplo de uso de futures */
-/* -------------------------------------------------------------------*/
+// Nome: Pedro Freitas de Moura
+// Código: Calculador de quantidade de primos usando Callable e Futures
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -15,7 +12,7 @@ import java.util.List;
 
 
 //classe runnable
-class MyCallable implements Callable<Long> {
+ class MyCallable implements Callable<Long> {
   int numThreads;
   int n;
   int idCall;
@@ -25,9 +22,9 @@ class MyCallable implements Callable<Long> {
     n = num;
     idCall = id;
   }
-  
   //método para calcular se um num é primo
-  public Long ehPrimo(int n){
+
+  public int ehPrimo(Long n){
     int i;
     if (n <= 1) return 0;
     if (n == 2) return 1;
@@ -37,43 +34,29 @@ class MyCallable implements Callable<Long> {
     }
     return 1;
   }
-
-  //método para execução
   public Long call() throws Exception {
     long s = 0;
     for (long i=idCall; i<=n; i+=numThreads) {
-      s += ehPrimo(i);
+      s = s + ehPrimo(i);
     }
     return s;
   }
-}
-
-//classe do método main
-public class FuturePool  {
-  private static final int N = 3;
-  private static final int NTHREADS = 10;
-  private static final int num = 1000;
+} 
+ public class FuturePool  {
+  private static final int num = 10;
+  private static final int NTHREADS = 5;
   public static void main(String[] args) {
-    //cria um pool de threads (NTHREADS)
     ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
-    //cria uma lista para armazenar referencias de chamadas assincronas
     List<Future<Long>> list = new ArrayList<Future<Long>>();
-
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < NTHREADS; i++) {
       Callable<Long> worker = new MyCallable(NTHREADS, num, i);
-      /*submit() permite enviar tarefas Callable ou Runnable e obter um objeto Future para acompanhar o progresso e recuperar o resultado da tarefa
-       */
       Future<Long> submit = executor.submit(worker);
       list.add(submit);
     }
-
-    //pode fazer outras tarefas...
-
-    //recupera os resultados e faz o somatório final
     long sum = 0;
     for (Future<Long> future : list) {
       try {
-        sum += future.get(); //bloqueia se a computação nao tiver terminado
+        sum += future.get();
       } catch (InterruptedException e) {
         e.printStackTrace();
       } catch (ExecutionException e) {
@@ -83,4 +66,4 @@ public class FuturePool  {
     System.out.println(sum);
     executor.shutdown();
   }
-}
+} 
